@@ -1,2 +1,2 @@
-# Go-Nuxt-Template
- Project template using Go + Nuxt
+# Notes-App
+Project using Go + Nuxt.js

@@ -1,0 +1,7 @@
+.idea
+logfile
+config.env
+client/node_modules
+client/.nuxt
+client/dist
+client/npm-debug.log

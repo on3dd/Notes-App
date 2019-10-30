@@ -7,12 +7,6 @@ Make sure Go is already installed on your PC.
 Clone this repository and install all required dependencies.
 
 ## Setup
-### Database
-Create a PostgreSQL database and then create following table:
-```sql
-IS NOT YET IMPLEMENTED!
-```
-
 ### Environment variables
 Create `config.env` file and setup the following variables:
 ```
@@ -24,7 +18,13 @@ db_port = *postgres_server_port*
 ````
 
 ## Start 
-Type the following code in the terminal:
+Type the following code in the terminal to run the API server:
 ```
-go run server.go
+$ go run server.go
+```
+Then type the following to run the development server:
+```
+$ cd client
+$ npm run dev
+
 ```

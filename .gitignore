@@ -1,4 +1,5 @@
 .idea
+*exe
 logfile
 config.env
 client/node_modules

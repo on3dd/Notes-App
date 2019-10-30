@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"Go-Nuxt-Template/api"
 )
 
 func main() {
@@ -39,6 +40,9 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 		Addr:         ":8080",
 	}
+
+	apiHandler := api.New(db)
+	http.Handle("/api/", apiHandler)
 
 	log.Printf("Server successfully started at port %v\n", server.Addr)
 	log.Println(server.ListenAndServe())

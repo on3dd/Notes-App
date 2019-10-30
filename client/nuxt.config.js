@@ -20,6 +20,12 @@ module.exports = {
   /*
   ** Build configuration
   */
+  buildModules: [
+    '@nuxtjs/vuetify'
+  ],
+  vuetify: {
+    /* module options */
+  },
   build: {
     /*
     ** Run ESLint on save
@@ -33,7 +39,7 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
   }
 }
 

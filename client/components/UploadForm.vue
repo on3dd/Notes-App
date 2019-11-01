@@ -66,6 +66,9 @@
                 v => (v && v.length >= 10) || 'Название должно содержать как минимум 10 символов',
             ],
 
+            description: '',
+            descriptionRules: [],
+
             category: '',
             categoryRules: [
                 v => !!v || 'Поле быть заполнено',
@@ -86,7 +89,7 @@
 
         methods: {
             validate () {
-                if (this.$refs.form.validate()) {
+               if (this.$refs.form.validate()) {
                     this.snackbar = true
                 }
             },

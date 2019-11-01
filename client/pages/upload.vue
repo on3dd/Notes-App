@@ -1,8 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar>
-      <Navbar></Navbar>
-    </v-app-bar>
+    <Navbar></Navbar>
     <v-content>
       <v-container
         class="my-12"

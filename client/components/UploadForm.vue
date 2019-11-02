@@ -1,14 +1,18 @@
 <template>
   <v-form
-    ref="form"
+    method="post"
+    action="localhost:8080/api/v1/addNote"
+    id="form"
     v-model="valid"
     lazy-validation
+
   >
     <v-text-field
       v-model="title"
       :rules="titleRules"
       label="Название"
       required
+      name="title"
     ></v-text-field>
 
     <v-textarea
@@ -16,13 +20,24 @@
       :rules="descriptionRules"
       label="Описание"
       hint="Введите описание работы"
+      name="descirption"
     ></v-textarea>
+
+    <v-file-input
+      v-model="file"
+      :rules="fileRules"
+      label="Файлы"
+      accept="application/pdf"
+      required
+      name="file"
+    ></v-file-input>
 
     <v-text-field
       v-model="category"
       :rules="categoryRules"
       label="Категория"
       required
+      name="category"
     ></v-text-field>
 
     <v-text-field
@@ -30,6 +45,7 @@
       :rules="subjectRules"
       label="Предмет"
       required
+      name="subject"
     ></v-text-field>
 
     <v-text-field
@@ -37,6 +53,7 @@
       :rules="teacherRules"
       label="Преподаватель"
       required
+      name="teacher"
     ></v-text-field>
 
     <v-checkbox
@@ -48,7 +65,9 @@
 
     <v-btn
       color="success"
-      class="mr-4"
+      class="mx-4"
+      :disabled="!valid"
+      type="submit"
     >
       Отправить
     </v-btn>
@@ -59,11 +78,16 @@
     export default {
         name: "UploadForm",
         data: () => ({
-            valid: true,
+            valid: false,
             title: '',
             titleRules: [
-                v => !!v || 'Поле быть заполнено',
+                v => !!v || 'Поле должно быть заполнено',
                 v => (v && v.length >= 10) || 'Название должно содержать как минимум 10 символов',
+            ],
+
+            file: null,
+            fileRules: [
+                v => !!v || "Поле должно быть заполнено"
             ],
 
             description: '',
@@ -71,34 +95,26 @@
 
             category: '',
             categoryRules: [
-                v => !!v || 'Поле быть заполнено',
+                v => !!v || 'Поле должно быть заполнено',
             ],
 
             subject: '',
             subjectRules: [
-                v => !!v || 'Поле быть заполнено',
+                v => !!v || 'Поле должно быть заполнено',
             ],
 
             teacher: '',
             teacherRules: [
-                v => !!v || 'Поле быть заполнено',
+                v => !!v || 'Поле должно быть заполнено',
             ],
 
             checkbox: false,
         }),
 
         methods: {
-            validate () {
-               if (this.$refs.form.validate()) {
-                    this.snackbar = true
-                }
-            },
-            reset () {
-                this.$refs.form.reset()
-            },
-            resetValidation () {
-                this.$refs.form.resetValidation()
-            },
+            // submit() {
+            //     form.submit()
+            // }
         },
 
     }

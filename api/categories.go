@@ -18,6 +18,7 @@ type Category struct {
 // GetCategory gets single category from DB by id
 func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -46,6 +47,7 @@ func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 // GetCategories gets all categories from DB
 func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	rows, err := api.db.Query("SELECT * FROM categories ORDER BY name")
 	if err != nil {

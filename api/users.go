@@ -17,6 +17,7 @@ type User struct {
 // GetUser gets single user from DB by id
 func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -45,6 +46,7 @@ func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 // GetUsers gets all users from DB
 func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	rows, err := api.db.Query("SELECT * FROM users ORDER BY name")
 	if err != nil {

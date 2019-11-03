@@ -17,6 +17,7 @@ type Teacher struct {
 // GetTeacher gets single teacher from DB by id
 func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -45,8 +46,17 @@ func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 // GetTeachers gets all teachers from DB
 func (api *API) GetTeachers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	rows, err := api.db.Query("SELECT * FROM teacher ORDER BY name")
+	var rows *sql.Rows
+	var err error
+
+	id := r.FormValue("id")
+	if id == "" {
+		rows, err = api.db.Query("SELECT * FROM teacher ORDER BY name")
+	} else {
+		rows, err = api.db.Query("SELECT * FROM teacher WHERE subject_id = $1 ORDER BY name", id)
+	}
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
 		log.Fatal(err)

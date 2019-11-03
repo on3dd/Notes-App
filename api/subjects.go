@@ -16,6 +16,7 @@ type Subject struct {
 // GetSubject gets single subject from DB by id
 func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -44,8 +45,17 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 // GetSubjects gets all subjects from DB
 func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	rows, err := api.db.Query("SELECT * FROM subjects ORDER BY name")
+	var rows *sql.Rows
+	var err error
+
+	id := r.FormValue("id")
+	if id == "" {
+		rows, err = api.db.Query("SELECT * FROM subjects ORDER BY name")
+	} else {
+		rows, err = api.db.Query("SELECT * FROM subjects WHERE id = $1 ORDER BY name", id)
+	}
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
 		log.Fatal(err)

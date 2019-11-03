@@ -23,6 +23,7 @@ type Note struct {
 // GetNote gets single note from DB by id
 func (api *API) GetNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -52,6 +53,7 @@ func (api *API) GetNote(w http.ResponseWriter, r *http.Request) {
 // GetNotes gets all notes from DB
 func (api *API) GetNotes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	var rows *sql.Rows
 	var err error

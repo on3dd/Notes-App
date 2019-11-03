@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <Navbar></Navbar>
-    <v-content>
+    <v-content style="min-height: 100vh">
       <v-container
         class="my-12"
       >

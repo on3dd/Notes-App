@@ -32,29 +32,37 @@
       name="file"
     ></v-file-input>
 
-    <v-text-field
+    <v-select
       v-model="category"
       :rules="categoryRules"
+      :items="categories"
+      item-text="description"
       label="Категория"
       required
       name="category"
-    ></v-text-field>
+      @change="getSubjects"
+    ></v-select>
 
-    <v-text-field
+    <v-select
       v-model="subject"
       :rules="subjectRules"
+      :items="subjects"
+      item-text="name"
       label="Предмет"
       required
       name="subject"
-    ></v-text-field>
+      @change="getTeachers"
+    ></v-select>
 
-    <v-text-field
+    <v-select
       v-model="teacher"
       :rules="teacherRules"
+      :items="teachers"
+      item-text="name"
       label="Преподаватель"
       required
       name="teacher"
-    ></v-text-field>
+    ></v-select>
 
     <v-checkbox
       v-model="checkbox"
@@ -75,6 +83,8 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     export default {
         name: "UploadForm",
         data: () => ({
@@ -97,25 +107,83 @@
             categoryRules: [
                 v => !!v || 'Поле должно быть заполнено',
             ],
+            categories: ["Выберите категорию"],
 
             subject: '',
             subjectRules: [
                 v => !!v || 'Поле должно быть заполнено',
             ],
+            subjects: [],
 
             teacher: '',
             teacherRules: [
                 v => !!v || 'Поле должно быть заполнено',
             ],
+            teachers: [],
 
             checkbox: false,
         }),
 
         methods: {
-            // submit() {
-            //     form.submit()
-            // }
+            getCategories: function() {
+                axios.get('http://localhost:8080/api/v1/getCategories')
+                    .then(response => {
+                        this.categories = response.data
+
+                        this.subjects = []
+                        this.subject = ''
+
+                        this.teachers = []
+                        this.teacher = ''
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            getSubjects: function() {
+                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
+                console.log("subject id = ", this.categories[categoryIdx].subject)
+                axios.get("http://localhost:8080/api/v1/getSubjects", {
+                    params: {
+                        id: this.categories[categoryIdx].subject
+                    }
+                })
+                    .then(response => {
+                        this.subjects = response.data
+                        this.subject = ''
+
+                        this.teachers = []
+                        this.teacher = ''
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            getTeachers: function() {
+                let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
+                console.log("teacher id = ", this.subjects[subjectIdx].id)
+                axios.get("http://localhost:8080/api/v1/getTeachers", {
+                    params: {
+                        id: this.subjects[subjectIdx].id
+                    }
+                })
+                    .then(response => {
+                        this.teachers = response.data
+                        this.teacher = ''
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
         },
+
+        mounted() {
+
+        },
+
+        created() {
+            this.getCategories()
+        }
 
     }
 </script>

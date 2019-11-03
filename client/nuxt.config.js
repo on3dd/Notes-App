@@ -21,8 +21,13 @@ module.exports = {
   ** Build configuration
   */
   buildModules: [
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/axios',
   ],
+
+  axios: {
+    // proxyHeaders: false
+  },
   vuetify: {
     /* module options */
   },

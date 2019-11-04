@@ -3,8 +3,12 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -16,7 +20,7 @@ type Note struct {
 	TeacherId   int            `json:"teacher_id"`
 	PostedAt    string         `json:"posted_at"`
 	Title       string         `json:"title"`
-	Description sql.NullString `json:"descirption"`
+	Description string `json:"descirption"`
 	Link        string         `json:"link"`
 }
 
@@ -99,9 +103,40 @@ func (api *API) GetNotes(w http.ResponseWriter, r *http.Request) {
 // AddNote adds a new note to DB
 func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	err := r.ParseMultipartForm(0)
+	if err != nil && err != io.EOF {
+		log.Fatal(err)
+	}
 
 	var note Note
-	err := json.NewDecoder(r.Body).Decode(&note)
+	note.Author, _ = strconv.Atoi(r.FormValue("author"))
+	note.CategoryId, _ = strconv.Atoi(r.FormValue("category_id"))
+	note.TeacherId, _ = strconv.Atoi(r.FormValue("teacher_id"))
+	note.Title = r.FormValue("title")
+	note.Description = r.FormValue("description")
+
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		log.Fatal("Error retrieving the file: %v", err)
+	}
+	defer file.Close()
+
+	sep := string(os.PathSeparator)
+	path := "downloads" + sep + "category-" + strconv.Itoa(note.CategoryId) + sep + "teacher-" + strconv.Itoa(note.TeacherId)
+	//path := "../downloads/" + "category-" + strconv.Itoa(note.CategoryId) + "/teacher-" + strconv.Itoa(note.TeacherId)
+
+	CreateDirIfNotExist(path)
+
+	note.Link = path + sep + handler.Filename
+
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile(note.Link, fileBytes, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

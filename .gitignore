@@ -4,6 +4,7 @@
 # Local files
 logfile
 config.env
+downloads
 
 # Go files
 # Binaries for programs and plugins

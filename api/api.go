@@ -2,7 +2,9 @@ package api
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
+	"os"
 )
 
 type API struct {
@@ -25,4 +27,13 @@ func (api *API) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func WriteStatus(w http.ResponseWriter, status int, text[]byte) {
 	w.WriteHeader(status)
 	w.Write(text)
+}
+
+func CreateDirIfNotExist(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }

@@ -1,11 +1,9 @@
 <template>
   <v-form
-    method="post"
-    action="localhost:8080/api/v1/addNote"
     id="form"
     v-model="valid"
     lazy-validation
-
+    onsubmit="return false;"
   >
     <v-text-field
       v-model="title"
@@ -76,6 +74,7 @@
       class="mx-4"
       :disabled="!valid"
       type="submit"
+      @click="submit"
     >
       Отправить
     </v-btn>
@@ -142,7 +141,7 @@
             },
             getSubjects: function() {
                 let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
-                console.log("subject id = ", this.categories[categoryIdx].subject)
+                // console.log("subject id = ", this.categories[categoryIdx].subject)
                 axios.get("http://localhost:8080/api/v1/getSubjects", {
                     params: {
                         id: this.categories[categoryIdx].subject
@@ -161,7 +160,7 @@
             },
             getTeachers: function() {
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
-                console.log("teacher id = ", this.subjects[subjectIdx].id)
+                // console.log("teacher id = ", this.subjects[subjectIdx].id)
                 axios.get("http://localhost:8080/api/v1/getTeachers", {
                     params: {
                         id: this.subjects[subjectIdx].id
@@ -173,6 +172,32 @@
                     })
                     .catch(err => {
                         console.log(err)
+                    })
+            },
+            submit: function () {
+                let data = new FormData()
+
+                data.append("author", 1)
+
+                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
+                data.append("category_id", this.categories[categoryIdx].id)
+
+                let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
+                data.append("teacher_id", this.subjects[subjectIdx].id)
+
+                // data.append("posted_at", Date.now())
+                data.append("title", this.title)
+                data.append("description", this.description)
+                data.append("file", this.file)
+
+                // for (let value of data.values()) {
+                //     console.log(value)
+                // }
+
+                axios.post("http://localhost:8080/api/v1/addNote", data)
+                    .then(response => {
+                        console.log(response.statusText)
+                        console.log(response.data)
                     })
             }
         },

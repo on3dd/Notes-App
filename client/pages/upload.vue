@@ -15,7 +15,6 @@
             :md="6"
             align="center"
           >
-            <span class="display-3 text-center">Загрузка работы</span>
             <UploadForm></UploadForm>
           </v-col>
         </v-row>

@@ -5,6 +5,7 @@
     lazy-validation
     onsubmit="return false;"
   >
+    <span class="display-3 text-center d-block mb-3">Загрузка работы</span>
     <v-text-field
       v-model="title"
       :rules="titleRules"

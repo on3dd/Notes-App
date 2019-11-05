@@ -22,7 +22,7 @@ func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -31,10 +31,10 @@ func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 	var category Category
 	err := row.Scan(&category.Id, &category.Subject, &category.ParentId, &category.Name, &category.Description)
 	if err == sql.ErrNoRows {
-		WriteStatus(w, http.StatusNotFound, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -51,7 +51,7 @@ func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := api.db.Query("SELECT * FROM categories ORDER BY name")
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -60,13 +60,13 @@ func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 		category := &Category{}
 		err := rows.Scan(&category.Id, &category.Subject, &category.ParentId, &category.Name, &category.Description)
 		if err != nil {
-			WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
 		categories = append(categories, category)
 	}
 	if err = rows.Err(); err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -76,7 +76,7 @@ func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(categories)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 }
@@ -97,7 +97,7 @@ func (api *API) AddCategory(w http.ResponseWriter, r *http.Request) {
 	if err == sql.ErrNoRows {
 		category.Id = 1
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 	category.Id = num + 1
@@ -106,11 +106,11 @@ func (api *API) AddCategory(w http.ResponseWriter, r *http.Request) {
 		category.Id, category.Subject, category.ParentId, category.Name, category.Description)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // UpdateCategory updates a single category in DB by id
@@ -119,7 +119,7 @@ func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -133,11 +133,11 @@ func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		id, category.Name, category.Description)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // DeleteCategory deletes a single category from DB by id
@@ -146,15 +146,15 @@ func (api *API) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
 	_, err := api.db.Exec("DELETE FROM categories WHERE id = $1", id)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }

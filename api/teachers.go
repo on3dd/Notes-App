@@ -21,7 +21,7 @@ func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -30,10 +30,10 @@ func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 	var teacher Teacher
 	err := row.Scan(&teacher.Id, &teacher.SubjectId, &teacher.Name)
 	if err == sql.ErrNoRows {
-		WriteStatus(w, http.StatusNotFound, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -58,7 +58,7 @@ func (api *API) GetTeachers(w http.ResponseWriter, r *http.Request) {
 		rows, err = api.db.Query("SELECT * FROM teacher WHERE subject_id = $1 ORDER BY name", id)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -67,13 +67,13 @@ func (api *API) GetTeachers(w http.ResponseWriter, r *http.Request) {
 		teacher := &Teacher{}
 		err := rows.Scan(&teacher.Id, &teacher.SubjectId, &teacher.Name)
 		if err != nil {
-			WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
 		teachers = append(teachers, teacher)
 	}
 	if err = rows.Err(); err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -83,7 +83,7 @@ func (api *API) GetTeachers(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(teachers)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 }
@@ -105,7 +105,7 @@ func (api *API) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	//if err == sql.ErrNoRows {
 	//	teacher.Id = 1
 	//} else if err != nil {
-	//	WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+	//	WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 	//	log.Fatal(err)
 	//}
 	//teacher.Id = num + 1
@@ -114,11 +114,11 @@ func (api *API) AddTeacher(w http.ResponseWriter, r *http.Request) {
 		&teacher.Id, &teacher.SubjectId, &teacher.Name)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // UpdateTeacher updates a single teacher in DB by id
@@ -127,7 +127,7 @@ func (api *API) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -141,11 +141,11 @@ func (api *API) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 		id, teacher.Name)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // DeleteTeacher deletes a single teacher from DB by id
@@ -154,15 +154,15 @@ func (api *API) DeleteTeacher(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
 	_, err := api.db.Exec("DELETE FROM teacher WHERE id = $1", id)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }

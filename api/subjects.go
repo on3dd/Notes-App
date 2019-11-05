@@ -20,7 +20,7 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -29,10 +29,10 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 	var subject Subject
 	err := row.Scan(&subject.Id, &subject.Name)
 	if err == sql.ErrNoRows {
-		WriteStatus(w, http.StatusNotFound, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -57,7 +57,7 @@ func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
 		rows, err = api.db.Query("SELECT * FROM subjects WHERE id = $1 ORDER BY name", id)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -66,13 +66,13 @@ func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
 		subject := &Subject{}
 		err := rows.Scan(&subject.Id, &subject.Name)
 		if err != nil {
-			WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
 		subjects = append(subjects, subject)
 	}
 	if err = rows.Err(); err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -82,7 +82,7 @@ func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(subjects)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 }
@@ -103,7 +103,7 @@ func (api *API) AddSubject(w http.ResponseWriter, r *http.Request) {
 	if err == sql.ErrNoRows {
 		subject.Id = 1
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 	subject.Id = num + 1
@@ -112,11 +112,11 @@ func (api *API) AddSubject(w http.ResponseWriter, r *http.Request) {
 		subject.Id, subject.Name)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // UpdateSubject updates a single subject in DB by id
@@ -125,7 +125,7 @@ func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -139,11 +139,11 @@ func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 		id, subject.Name)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // DeleteSubject deletes a single subject from DB by id
@@ -152,15 +152,15 @@ func (api *API) DeleteSubject(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
 	_, err := api.db.Exec("DELETE FROM subjects WHERE id = $1", id)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }

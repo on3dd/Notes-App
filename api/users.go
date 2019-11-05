@@ -21,7 +21,7 @@ func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -30,10 +30,10 @@ func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := row.Scan(&user.Id, &user.Name, &user.Password)
 	if err == sql.ErrNoRows {
-		WriteStatus(w, http.StatusNotFound, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -50,7 +50,7 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := api.db.Query("SELECT * FROM users ORDER BY name")
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -59,13 +59,13 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 		user := &User{}
 		err := rows.Scan(&user.Id, &user.Name, &user.Password)
 		if err != nil {
-			WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
 		users = append(users, user)
 	}
 	if err = rows.Err(); err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -75,7 +75,7 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(users)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 }
@@ -96,7 +96,7 @@ func (api *API) AddUser(w http.ResponseWriter, r *http.Request) {
 	if err == sql.ErrNoRows {
 		user.Id = 1
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 	user.Id = num + 1
@@ -105,7 +105,7 @@ func (api *API) AddUser(w http.ResponseWriter, r *http.Request) {
 		user.Id, user.Name, user.Password)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -118,7 +118,7 @@ func (api *API) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -132,7 +132,7 @@ func (api *API) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		id, user.Name, user.Password)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -145,13 +145,13 @@ func (api *API) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
 	_, err := api.db.Exec("DELETE FROM users WHERE id = $1", id)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 

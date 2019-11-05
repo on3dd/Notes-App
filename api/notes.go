@@ -31,7 +31,7 @@ func (api *API) GetNote(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -41,10 +41,10 @@ func (api *API) GetNote(w http.ResponseWriter, r *http.Request) {
 	err := row.Scan(&note.Id, &note.Author, &note.CategoryId, &note.TeacherId, &note.PostedAt,
 		&note.Title, &note.Description, &note.Link)
 	if err == sql.ErrNoRows {
-		WriteStatus(w, http.StatusNotFound, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -69,7 +69,7 @@ func (api *API) GetNotes(w http.ResponseWriter, r *http.Request) {
 		rows, err = api.db.Query("SELECT * FROM notes ORDER BY posted_at DESC LIMIT $1", num)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -79,13 +79,13 @@ func (api *API) GetNotes(w http.ResponseWriter, r *http.Request) {
 		err := rows.Scan(&note.Id, &note.Author, &note.CategoryId, &note.TeacherId, &note.PostedAt,
 			&note.Title, &note.Description, &note.Link)
 		if err != nil {
-			WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
 		notes = append(notes, note)
 	}
 	if err = rows.Err(); err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
@@ -95,7 +95,7 @@ func (api *API) GetNotes(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(notes)
 	}
 	if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 }
@@ -125,7 +125,6 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 
 	sep := string(os.PathSeparator)
 	path := "downloads" + sep + "category-" + strconv.Itoa(note.CategoryId) + sep + "teacher-" + strconv.Itoa(note.TeacherId)
-	//path := "../downloads/" + "category-" + strconv.Itoa(note.CategoryId) + "/teacher-" + strconv.Itoa(note.TeacherId)
 
 	CreateDirIfNotExist(path)
 
@@ -147,7 +146,7 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 	if err == sql.ErrNoRows {
 		note.Id = 1
 	} else if err != nil {
-		WriteStatus(w, http.StatusInternalServerError, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 	note.Id = num + 1
@@ -156,11 +155,11 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 		note.Id, note.Author, note.CategoryId, note.TeacherId, time.Now(), note.Title, note.Description, note.Link)
 
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // UpdateNote updates a single note in DB by id
@@ -169,7 +168,7 @@ func (api *API) UpdateNote(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
@@ -182,11 +181,11 @@ func (api *API) UpdateNote(w http.ResponseWriter, r *http.Request) {
 	_, err = api.db.Exec("UPDATE notes SET (title, descirption, link) = ($2, $3, $4) WHERE id = ($1)",
 		id, note.Title, note.Description, note.Link)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
 // DeleteNote deletes a single note from DB by id
@@ -195,15 +194,15 @@ func (api *API) DeleteNote(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
 	_, err := api.db.Exec("DELETE FROM notes WHERE id = $1", id)
 	if err != nil {
-		WriteStatus(w, http.StatusBadRequest, []byte("{'status':'error'}"))
+		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte("{'status':'success'}"))
+	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }

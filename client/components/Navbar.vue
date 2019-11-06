@@ -1,6 +1,6 @@
 <template>
-<v-app id="inspire">
-  <v-navigation-drawer
+  <v-app id="inspire">
+    <v-navigation-drawer
       v-model="drawer"
       app
     >
@@ -15,7 +15,7 @@
         </v-list-item>
         <v-list-item link>
           <v-list-item-action>
-                      <v-icon x-large dark>folder_open</v-icon>
+            <v-icon>mdi-folder-open</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Работы</v-list-item-title>
@@ -37,22 +37,24 @@
       color="indigo"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>Американские конспекты</v-toolbar-title>
     </v-app-bar>
-</v-app>
+  </v-app>
 </template>
 
 <script>
-export default {
-  name: "Navbar",
-  props: {
-      source: String,
-    },
-    data: () => ({
-      drawer: null,
-    }),
-};
+    import 'material-design-icons-iconfont/dist/material-design-icons.css'
+
+    export default {
+        name: "Navbar",
+        props: {
+            source: String,
+        },
+        data: () => ({
+            drawer: null,
+        }),
+    };
 </script>
 
 <style>

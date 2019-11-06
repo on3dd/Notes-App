@@ -10,8 +10,11 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Client for application' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css' }
+
     ]
+
   },
   /*
   ** Customize the progress bar color

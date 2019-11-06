@@ -15,7 +15,7 @@
         </v-list-item>
         <v-list-item link>
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+                      <v-icon x-large dark>folder_open</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Работы</v-list-item-title>
@@ -55,5 +55,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+  .v-application--wrap {
+    min-height: 0;
+  }
 </style>

@@ -14,19 +14,25 @@
             :sm="10"
             :md="6"
           >
-            <span class="d-none d-md-block display-3 mb-3">{{ note.title }}</span>
-            <span class="d-block d-md-none display-2 mb-3">{{ note.title }}</span>
+            <span class="d-none d-md-block display-3 mb-3 text-truncate">{{ note.title }}</span>
+            <span class="d-block d-md-none display-2 mb-3 text-truncate">{{ note.title }}</span>
             <span class="headline font-weight-regular d-block mb-2">{{note.descirption}}</span>
             <span class="d-none d-md-block title mb-2">
-              <a class="author font-weight-regular mr-2" href="">{{ author.name }},</a>
-              <span class="font-weight-light">{{ note.posted_at }}</span>
-            </span>
+                <a class="author font-weight-regular mr-2" href="">{{ author.name }},</a>
+                <span class="font-weight-light">{{ note.posted_at }}</span>
+              </span>
             <span class="d-block d-md-none title mb-2">
-              <span class="d-block font-weight-regular mb-2">Автор: <a href="" class="author">{{ author.name }}</a></span>
-              <span class="d-block font-weight-light">{{ note.posted_at }}</span>
-            </span>
-            <span class="title mb-2 d-block font-weight-regular">Предмет: <a class="subject" href="">{{subject.name}}</a></span>
+                <span class="d-block font-weight-regular mb-2">Автор:
+                  <a href="" class="author">{{ author.name }}</a>
+                </span>
+                <span class="d-block font-weight-light">{{ note.posted_at }}</span>
+              </span>
+            <span class="title mb-2 d-block font-weight-regular">Предмет: <a class="subject"
+                                                                             href="">{{subject.name}}</a></span>
             <span class="title mb-2 d-block font-weight-regular">Преподаватель: <a class="teacher" href="">{{teacher.name}}</a></span>
+            <div class="my-6">
+              <v-btn x-large color="primary"><a style="color:white;text-decoration:none;">Отрыть работу</a></v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -115,7 +121,7 @@
                     console.log(err)
                 })
         },
-        validate ({ params }) {
+        validate({params}) {
             return /^\d+$/.test(params.id)
         }
     }
@@ -125,6 +131,7 @@
   .author, .subject, .teacher {
     text-decoration: none;
   }
+
   .author:hover, .subject:hover, .teacher:hover {
     text-decoration: underline;
   }

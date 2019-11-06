@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 
+	"Notes-App/api"
 	"fmt"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -10,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"Notes-App/api"
 )
 
 func main() {

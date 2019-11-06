@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -159,7 +160,8 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
+	text := fmt.Sprintf(`{"status":"success", "id": %v}`, note.Id)
+	WriteStatus(w, http.StatusOK, []byte(text))
 }
 
 // UpdateNote updates a single note in DB by id

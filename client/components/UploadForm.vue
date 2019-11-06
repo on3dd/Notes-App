@@ -191,14 +191,14 @@
                 data.append("description", this.description)
                 data.append("file", this.file)
 
-                // for (let value of data.values()) {
-                //     console.log(value)
-                // }
-
                 axios.post("http://localhost:8080/api/v1/addNote", data)
                     .then(response => {
-                        console.log(response.statusText)
-                        console.log(response.data)
+                        // console.log(response.status)
+                        // console.log(response.data)
+
+                        if (response.status == 200) {
+                            this.$nuxt.$router.replace({ path: `/notes/${response.data.id}`})
+                        }
                     })
             }
         },

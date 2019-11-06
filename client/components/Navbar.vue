@@ -10,7 +10,7 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Главная</v-list-item-title>
+            <v-list-item-title style="font-size: 15px">Главная</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link href="/notes">
@@ -18,7 +18,7 @@
             <v-icon>mdi-folder-open</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Работы</v-list-item-title>
+            <v-list-item-title style="font-size: 15px">Работы</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link href="/upload">
@@ -26,7 +26,7 @@
             <v-icon>mdi-upload</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Загрузка</v-list-item-title>
+            <v-list-item-title style="font-size: 15px">Загрузка</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

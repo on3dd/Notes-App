@@ -34,8 +34,7 @@
 
     <v-app-bar
       app
-      color="indigo"
-      dark
+      color="white"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>Американские конспекты</v-toolbar-title>
@@ -52,7 +51,7 @@
             source: String,
         },
         data: () => ({
-            drawer: null,
+            drawer: false,
         }),
     };
 </script>

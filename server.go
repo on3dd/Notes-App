@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"Go-Nuxt-Template/api"
+	"Notes-App/api"
 )
 
 func main() {

@@ -5,7 +5,7 @@
       app
     >
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link href="/">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -13,7 +13,7 @@
             <v-list-item-title>Главная</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link href="/notes">
           <v-list-item-action>
             <v-icon>mdi-folder-open</v-icon>
           </v-list-item-action>
@@ -21,12 +21,12 @@
             <v-list-item-title>Работы</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link href="/upload">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>mdi-upload</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>О нас</v-list-item-title>
+            <v-list-item-title>Загрузка</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

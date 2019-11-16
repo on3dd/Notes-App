@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 )
@@ -124,21 +123,22 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	sep := string(os.PathSeparator)
+	//sep := string(os.PathSeparator)
+	sep := "/"
 	path := "downloads" + sep + "category-" + strconv.Itoa(note.CategoryId) + sep + "teacher-" + strconv.Itoa(note.TeacherId)
 
-	CreateDirIfNotExist(path)
+	CreateDirIfNotExist("client/static/"+ path)
 
-	note.Link = path + sep + handler.Filename
+	note.Link = sep + path + sep + handler.Filename
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Cannot read the file: %v", err)
 	}
 
-	err = ioutil.WriteFile(note.Link, fileBytes, 0644)
+	err = ioutil.WriteFile("client/static" + note.Link, fileBytes, 0644)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Cannot write to the file: %v", err)
 	}
 
 	var num int
@@ -167,6 +167,7 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 // UpdateNote updates a single note in DB by id
 func (api *API) UpdateNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -193,6 +194,7 @@ func (api *API) UpdateNote(w http.ResponseWriter, r *http.Request) {
 // DeleteNote deletes a single note from DB by id
 func (api *API) DeleteNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {

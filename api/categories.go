@@ -84,6 +84,7 @@ func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 // AddCategory adds a new category to DB
 func (api *API) AddCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	var category Category
 	err := json.NewDecoder(r.Body).Decode(&category)
@@ -116,6 +117,7 @@ func (api *API) AddCategory(w http.ResponseWriter, r *http.Request) {
 // UpdateCategory updates a single category in DB by id
 func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {
@@ -143,6 +145,7 @@ func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 // DeleteCategory deletes a single category from DB by id
 func (api *API) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := r.FormValue("id")
 	if id == "" {

@@ -25,7 +25,7 @@ func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	row := api.db.QueryRow("SELECT * FROM teacher WHERE id = $1", id)
+	row := api.db.QueryRow("SELECT * FROM teachers WHERE id = $1", id)
 
 	var teacher Teacher
 	err := row.Scan(&teacher.Id, &teacher.SubjectId, &teacher.Name)
@@ -53,9 +53,9 @@ func (api *API) GetTeachers(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	if id == "" {
-		rows, err = api.db.Query("SELECT * FROM teacher ORDER BY name")
+		rows, err = api.db.Query("SELECT * FROM teachers ORDER BY name")
 	} else {
-		rows, err = api.db.Query("SELECT * FROM teacher WHERE subject_id = $1 ORDER BY name", id)
+		rows, err = api.db.Query("SELECT * FROM teachers WHERE subject_id = $1 ORDER BY name", id)
 	}
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
@@ -110,7 +110,7 @@ func (api *API) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	//}
 	//teacher.Id = num + 1
 
-	_, err = api.db.Exec("INSERT INTO teacher VALUES($1, $2, $3)",
+	_, err = api.db.Exec("INSERT INTO teachers VALUES($1, $2, $3)",
 		&teacher.Id, &teacher.SubjectId, &teacher.Name)
 
 	if err != nil {
@@ -137,7 +137,7 @@ func (api *API) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	_, err = api.db.Exec("UPDATE teacher SET name = $2 WHERE id = ($1)",
+	_, err = api.db.Exec("UPDATE teachers SET name = $2 WHERE id = ($1)",
 		id, teacher.Name)
 
 	if err != nil {
@@ -158,7 +158,7 @@ func (api *API) DeleteTeacher(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := api.db.Exec("DELETE FROM teacher WHERE id = $1", id)
+	_, err := api.db.Exec("DELETE FROM teachers WHERE id = $1", id)
 	if err != nil {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

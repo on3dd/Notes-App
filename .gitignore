@@ -5,6 +5,7 @@
 logfile
 config.env
 downloads
+client/static/downloads
 
 # Go files
 # Binaries for programs and plugins

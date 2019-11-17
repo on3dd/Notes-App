@@ -37,7 +37,16 @@
       color="white"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
-      <v-toolbar-title>Американские конспекты</v-toolbar-title>
+      <v-toolbar-title>Конспекты</v-toolbar-title>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        outlined
+        color="primary"
+      >
+        <v-icon class="mr-1">mdi-account-circle</v-icon>
+        <span>Войти</span>
+      </v-btn>
     </v-app-bar>
   </v-app>
 </template>
@@ -59,5 +68,8 @@
 <style>
   .v-application--wrap {
     min-height: 0;
+  }
+  .v-list-item--active .v-icon {
+    color: #1976d2 !important;
   }
 </style>

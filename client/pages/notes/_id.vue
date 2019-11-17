@@ -8,7 +8,7 @@
         <v-row
           justify="center"
           no-gutters
-          class="mx-md-6"
+          class="mx-md-6 px-2"
         >
           <v-col
             :sm="10"
@@ -31,7 +31,13 @@
                                                                              href="">{{subject.name}}</a></span>
             <span class="title mb-2 d-block font-weight-regular">Преподаватель: <a class="teacher" href="">{{teacher.name}}</a></span>
             <div class="my-6">
-              <v-btn x-large color="primary"><a style="color:white;text-decoration:none;" :href="note.link">Отрыть работу</a></v-btn>
+              <v-btn x-large color="d-sm-inline-block mr-1 primary"><a style="color:white;text-decoration:none;" :href="note.link">Отрыть</a></v-btn>
+              <v-btn x-large color="d-none d-sm-inline-block green"><a style="color:white;text-decoration:none;">Редактировать</a></v-btn>
+              <v-btn x-large color="d-sm-none my-2 green">
+                <a style="color:white;text-decoration:none;">
+                  <v-icon dark>mdi-pencil</v-icon>
+                </a>
+              </v-btn>
             </div>
           </v-col>
         </v-row>

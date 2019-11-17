@@ -113,13 +113,13 @@
             subjectRules: [
                 v => !!v || 'Поле должно быть заполнено',
             ],
-            subjects: [],
+            subjects: ["Выберите предмет"],
 
             teacher: '',
             teacherRules: [
                 v => !!v || 'Поле должно быть заполнено',
             ],
-            teachers: [],
+            teachers: ["Выберите преподавателя"],
 
             checkbox: false,
         }),
@@ -142,6 +142,7 @@
             },
             getSubjects: function() {
                 let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
+                if (categoryIdx == -1) return false
                 // console.log("subject id = ", this.categories[categoryIdx].subject)
                 axios.get("http://localhost:8080/api/v1/getSubjects", {
                     params: {
@@ -161,6 +162,7 @@
             },
             getTeachers: function() {
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
+                if (subjectIdx == -1) return false
                 // console.log("teacher id = ", this.subjects[subjectIdx].id)
                 axios.get("http://localhost:8080/api/v1/getTeachers", {
                     params: {
@@ -181,9 +183,11 @@
                 data.append("author", 1)
 
                 let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
+                if (categoryIdx == -1) return false;
                 data.append("category_id", this.categories[categoryIdx].id)
 
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
+                if (subjectIdx == -1) return false;
                 data.append("teacher_id", this.subjects[subjectIdx].id)
 
                 // data.append("posted_at", Date.now())
@@ -199,6 +203,9 @@
                         if (response.status == 200) {
                             this.$nuxt.$router.replace({ path: `/notes/${response.data.id}`})
                         }
+                    })
+                    .catch(err => {
+                        console.log(err)
                     })
             }
         },

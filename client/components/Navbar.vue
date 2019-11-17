@@ -5,7 +5,7 @@
       app
     >
       <v-list dense>
-        <v-list-item link href="/">
+        <v-list-item link nuxt to="/">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -13,7 +13,7 @@
             <v-list-item-title style="font-size: 15px">Главная</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link href="/notes">
+        <v-list-item link nuxt to="/notes">
           <v-list-item-action>
             <v-icon>mdi-folder-open</v-icon>
           </v-list-item-action>
@@ -21,7 +21,7 @@
             <v-list-item-title style="font-size: 15px">Работы</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link href="/upload">
+        <v-list-item link nuxt to="/upload">
           <v-list-item-action>
             <v-icon>mdi-upload</v-icon>
           </v-list-item-action>
@@ -51,7 +51,7 @@
             source: String,
         },
         data: () => ({
-            drawer: false,
+            drawer: true,
         }),
     };
 </script>

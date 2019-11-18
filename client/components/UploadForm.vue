@@ -35,7 +35,7 @@
       v-model="category"
       :rules="categoryRules"
       :items="categories"
-      item-text="description"
+      item-text="name"
       label="Категория"
       required
       name="category"
@@ -141,7 +141,7 @@
                     })
             },
             getSubjects: function() {
-                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
+                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
                 if (categoryIdx == -1) return false
                 // console.log("subject id = ", this.categories[categoryIdx].subject)
                 axios.get("http://localhost:8080/api/v1/getSubjects", {
@@ -178,16 +178,16 @@
                     })
             },
             submit: function () {
-                let data = new FormData()
-
-                data.append("author", 1)
-
                 let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
                 if (categoryIdx == -1) return false;
-                data.append("category_id", this.categories[categoryIdx].id)
 
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
                 if (subjectIdx == -1) return false;
+
+                let data = new FormData()
+
+                data.append("author", 1)
+                data.append("category_id", this.categories[categoryIdx].id)
                 data.append("teacher_id", this.subjects[subjectIdx].id)
 
                 // data.append("posted_at", Date.now())

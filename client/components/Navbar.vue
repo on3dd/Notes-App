@@ -34,14 +34,13 @@
 
     <v-app-bar
       app
-      color="white"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>Конспекты</v-toolbar-title>
       <v-spacer></v-spacer>
 
       <v-btn
-        outlined
+        outlined tile
         color="primary"
       >
         <v-icon class="mr-1">mdi-account-circle</v-icon>

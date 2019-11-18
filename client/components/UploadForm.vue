@@ -75,7 +75,7 @@
       class="mx-4"
       :disabled="!valid"
       type="submit"
-      @click="submit"
+      @click="this.submit"
     >
       Отправить
     </v-btn>
@@ -137,7 +137,7 @@
                         this.teacher = ''
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.error(err)
                     })
             },
             getSubjects: function() {
@@ -157,7 +157,7 @@
                         this.teacher = ''
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.error(err)
                     })
             },
             getTeachers: function() {
@@ -174,15 +174,15 @@
                         this.teacher = ''
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.error(err)
                     })
             },
             submit: function () {
-                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.description == this.category))
-                if (categoryIdx == -1) return false;
+                let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
+                if (categoryIdx == -1) return console.error("Error: Categories are empty!");
 
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
-                if (subjectIdx == -1) return false;
+                if (subjectIdx == -1) return console.error("Error: Subjects are empty!");;
 
                 let data = new FormData()
 
@@ -195,23 +195,16 @@
                 data.append("description", this.description)
                 data.append("file", this.file)
 
-                axios.post("http://localhost:8080/api/v1/addNote", data)
+                axios.post("http://localhost:8080/api/v1/notes", data)
                     .then(response => {
-                        // console.log(response.status)
-                        // console.log(response.data)
-
                         if (response.status == 200) {
                             this.$nuxt.$router.replace({ path: `/notes/${response.data.id}`})
                         }
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.error(err)
                     })
             }
-        },
-
-        mounted() {
-
         },
 
         created() {

@@ -83,21 +83,21 @@
               </v-btn>
               <div v-if="!isEditing" class="d-inline-block">
                 <div class="d-inline-block mr-1">
-                  <v-btn x-large color="success" class="d-none d-sm-inline-block" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block" @click="edit">
                     <a style="color:white;text-decoration:none;">Редактировать</a>
                   </v-btn>
-                  <v-btn x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="edit">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-pencil</v-icon>
                     </a>
                   </v-btn>
                 </div>
                 <div class="d-inline-block mr-1">
-                  <v-btn x-large color="error" class="d-none d-sm-inline-block"
+                  <v-btn v-bind:disabled="!note.link" x-large color="error" class="d-none d-sm-inline-block"
                          @click="console.log('pressed delete btn')">
                     <a style="color:white;text-decoration:none;">Удалить</a>
                   </v-btn>
-                  <v-btn x-large color="error" class="d-sm-none my-2" style="min-width: 0;"
+                  <v-btn v-bind:disabled="!note.link" x-large color="error" class="d-sm-none my-2" style="min-width: 0;"
                          @click="console.log('pressed delete btn')">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-delete</v-icon>
@@ -111,7 +111,7 @@
                          @click="update">
                     <a style="color:white;text-decoration:none;">Сохранить</a>
                   </v-btn>
-                  <v-btn x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="update">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="update">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-check</v-icon>
                     </a>
@@ -121,7 +121,7 @@
                   <v-btn v-bind:disabled="!note.link" x-large class="d-none d-sm-inline-block mr-1" @click="edit">
                     <a style="color:inherit;text-decoration:none;">Отмена</a>
                   </v-btn>
-                  <v-btn x-large class="d-sm-none my-2" style="min-width: 0;" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large class="d-sm-none my-2" style="min-width: 0;" @click="edit">
                     <a style="color:inherit;text-decoration:none;">
                       <v-icon dark>mdi-cancel</v-icon>
                     </a>
@@ -183,7 +183,7 @@
                 second: 'numeric'
             };
 
-            axios.get('http://localhost:8080/api/v1/getNote', {params: {id: this.$route.params.id}})
+            axios.get(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
                 .then(response => {
                     console.log(response.data)
                     this.note = response.data
@@ -194,7 +194,7 @@
                     let timestamp = Date.parse(this.note.posted_at)
                     this.note.posted_at = new Date(timestamp).toLocaleString("ru", options)
 
-                    axios.get('http://localhost:8080/api/v1/getUser', {params: {id: this.note.author_id}})
+                    axios.get(`http://localhost:8080/api/v1/users/${this.note.author_id}`)
                         .then(response => {
                             console.log(response.data)
                             this.author = response.data
@@ -203,12 +203,12 @@
                             console.log(err)
                         })
 
-                    axios.get('http://localhost:8080/api/v1/getCategory', {params: {id: this.note.category_id}})
+                    axios.get(`http://localhost:8080/api/v1/categories/${this.note.category_id}`)
                         .then(response => {
                             console.log(response.data)
                             this.category = response.data
 
-                            axios.get('http://localhost:8080/api/v1/getSubject', {params: {id: this.category.subject}})
+                            axios.get(`http://localhost:8080/api/v1/subjects/${this.category.subject}`)
                                 .then(response => {
                                     console.log(response.data)
                                     this.subject = response.data
@@ -221,7 +221,7 @@
                             console.log(err)
                         })
 
-                    axios.get('http://localhost:8080/api/v1/getTeacher', {params: {id: this.note.teacher_id}})
+                    axios.get(`http://localhost:8080/api/v1/teachers/${this.note.teacher_id}`)
                         .then(response => {
                             console.log(response.data)
                             this.teacher = response.data
@@ -245,12 +245,6 @@
             },
 
             update: function () {
-                // let title = document.getElementById("note-title").value;
-                // if (title == '') return false
-                //
-                // let description = document.getElementById("note-description").value
-                // if (description == '') return false
-
                 let data = new FormData()
                 data.append("title", this.noteTitleInput)
                 data.append("description", this.noteDescriptionInput)

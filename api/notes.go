@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
 	"log"
@@ -14,14 +15,14 @@ import (
 
 // Note represents a Note instance in the DB
 type Note struct {
-	Id          int            `json:"id"`
-	Author      int            `json:"author_id"`
-	CategoryId  int            `json:"category_id"`
-	TeacherId   int            `json:"teacher_id"`
-	PostedAt    string         `json:"posted_at"`
-	Title       string         `json:"title"`
-	Description string `json:"descirption"`
-	Link        string         `json:"link"`
+	Id          int    `json:"id,omitempty"`
+	Author      int    `json:"author_id,omitempty"`
+	CategoryId  int    `json:"category_id,omitempty"`
+	TeacherId   int    `json:"teacher_id,omitempty"`
+	PostedAt    string `json:"posted_at,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+	Link        string `json:"link,omitempty"`
 }
 
 // GetNote gets single note from DB by id
@@ -29,7 +30,7 @@ func (api *API) GetNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -127,7 +128,7 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 	sep := "/"
 	path := "downloads" + sep + "category-" + strconv.Itoa(note.CategoryId) + sep + "teacher-" + strconv.Itoa(note.TeacherId)
 
-	CreateDirIfNotExist("client/static/"+ path)
+	CreateDirIfNotExist("client/static/" + path)
 
 	note.Link = sep + path + sep + handler.Filename
 
@@ -136,7 +137,7 @@ func (api *API) AddNote(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Cannot read the file: %v", err)
 	}
 
-	err = ioutil.WriteFile("client/static" + note.Link, fileBytes, 0644)
+	err = ioutil.WriteFile("client/static"+note.Link, fileBytes, 0644)
 	if err != nil {
 		log.Fatalf("Cannot write to the file: %v", err)
 	}
@@ -169,26 +170,23 @@ func (api *API) UpdateNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
-	if id == "" {
-		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
-		return
-	}
+	id := mux.Vars(r)["id"]
 
 	var note Note
-	err := json.NewDecoder(r.Body).Decode(&note)
-	if err != nil {
-		log.Fatal(err)
-	}
+	note.Title = r.FormValue("title")
+	note.Description = r.FormValue("description")
 
-	_, err = api.db.Exec("UPDATE notes SET (title, descirption, link) = ($2, $3, $4) WHERE id = ($1)",
-		id, note.Title, note.Description, note.Link)
+	_, err := api.db.Exec("UPDATE notes SET (title, descirption) = ($2, $3) WHERE id = ($1)",
+		id, note.Title, note.Description)
 	if err != nil {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
 	}
 
-	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
+	err = json.NewEncoder(w).Encode(note)
+	if err != nil {
+		log.Fatalf("Error encoding request body: %v", err)
+	}
 }
 
 // DeleteNote deletes a single note from DB by id
@@ -196,7 +194,7 @@ func (api *API) DeleteNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

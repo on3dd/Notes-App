@@ -29,6 +29,7 @@ func WriteStatus(w http.ResponseWriter, status int, text[]byte) {
 	w.Write(text)
 }
 
+// CreateDirIfNotExist creates new path if it doesn't exist
 func CreateDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.MkdirAll(dir, 0755)

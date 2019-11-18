@@ -3,16 +3,17 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
 type Category struct {
-	Id          int           `json:"id"`
-	Subject     int           `json:"subject"`
-	ParentId    sql.NullInt64 `json:"parent_id"`
-	Name        string        `json:"name"`
-	Description string        `json:"description"`
+	Id          int           `json:"id,omitempty"`
+	Subject     int           `json:"subject,omitempty"`
+	ParentId    sql.NullInt64 `json:"parent_id,omitempty"`
+	Name        string        `json:"name,omitempty"`
+	Description string        `json:"description,omitempty"`
 }
 
 // GetCategory gets single category from DB by id
@@ -20,7 +21,7 @@ func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -119,7 +120,7 @@ func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -147,7 +148,7 @@ func (api *API) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

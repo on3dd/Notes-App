@@ -3,15 +3,16 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
 // Teacher represents a Teacher instance in the DB
 type Teacher struct {
-	Id       int    `json:"id"`
-	SubjectId int `json:"subject_id"`
-	Name     string `json:"name"`
+	Id        int    `json:"id,omitempty"`
+	SubjectId int    `json:"subject_id,omitempty"`
+	Name      string `json:"name,omitempty"`
 }
 
 // GetTeacher gets single teacher from DB by id
@@ -19,7 +20,7 @@ func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -99,17 +100,6 @@ func (api *API) AddTeacher(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	//var num int
-	//id := api.db.QueryRow("SELECT id FROM teacher ORDER BY id DESC LIMIT 1")
-	//err = id.Scan(&num)
-	//if err == sql.ErrNoRows {
-	//	teacher.Id = 1
-	//} else if err != nil {
-	//	WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
-	//	log.Fatal(err)
-	//}
-	//teacher.Id = num + 1
-
 	_, err = api.db.Exec("INSERT INTO teachers VALUES($1, $2, $3)",
 		&teacher.Id, &teacher.SubjectId, &teacher.Name)
 
@@ -125,7 +115,7 @@ func (api *API) AddTeacher(w http.ResponseWriter, r *http.Request) {
 func (api *API) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -152,7 +142,7 @@ func (api *API) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 func (api *API) DeleteTeacher(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

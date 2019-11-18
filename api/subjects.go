@@ -3,14 +3,15 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
 // Subject represents a Subject instance in the DB
 type Subject struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
+	Id   int    `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // GetSubject gets single subject from DB by id
@@ -18,7 +19,7 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -123,7 +124,7 @@ func (api *API) AddSubject(w http.ResponseWriter, r *http.Request) {
 func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return
@@ -150,7 +151,7 @@ func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 func (api *API) DeleteSubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id := r.FormValue("id")
+	id := mux.Vars(r)["id"]
 	if id == "" {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

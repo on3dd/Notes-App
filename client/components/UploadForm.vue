@@ -126,7 +126,7 @@
 
         methods: {
             getCategories: function() {
-                axios.get('http://localhost:8080/api/v1/getCategories')
+                axios.get('http://localhost:8080/api/v1/categories')
                     .then(response => {
                         this.categories = response.data
 
@@ -144,7 +144,7 @@
                 let categoryIdx = this.categories.indexOf(this.categories.find(el => el.name == this.category))
                 if (categoryIdx == -1) return false
                 // console.log("subject id = ", this.categories[categoryIdx].subject)
-                axios.get("http://localhost:8080/api/v1/getSubjects", {
+                axios.get("http://localhost:8080/api/v1/subjects", {
                     params: {
                         id: this.categories[categoryIdx].subject
                     }
@@ -164,7 +164,7 @@
                 let subjectIdx = this.subjects.indexOf(this.subjects.find(el => el.name == this.subject))
                 if (subjectIdx == -1) return false
                 // console.log("teacher id = ", this.subjects[subjectIdx].id)
-                axios.get("http://localhost:8080/api/v1/getTeachers", {
+                axios.get("http://localhost:8080/api/v1/teachers", {
                     params: {
                         id: this.subjects[subjectIdx].id
                     }
@@ -212,8 +212,7 @@
         }
 
     }
+
 </script>
 
-<style scoped>
-
-</style>
+<style></style>

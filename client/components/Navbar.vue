@@ -62,6 +62,7 @@
             drawer: true,
         }),
     };
+
 </script>
 
 <style>
@@ -71,4 +72,5 @@
   .v-list-item--active .v-icon {
     color: #1976d2 !important;
   }
+
 </style>

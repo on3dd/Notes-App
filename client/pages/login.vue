@@ -1,6 +1,7 @@
 <template>
   <v-app id="inspire">
-    <v-content>
+    <Navbar></Navbar>
+    <v-content >
       <v-container class="my-12">
         <v-row justify="center" no-gutters class="mx-md-6">
           <v-col :sm="10" :md="6" align="center">
@@ -14,11 +15,13 @@
 </template>
 
 <script>
+import Navbar from "../components/Navbar"
 import Footer from "../components/Footer";
 import LoginForm from "../components/LoginForm";
 
 export default {
   components: {
+    Navbar,
     Footer,
     LoginForm
   },

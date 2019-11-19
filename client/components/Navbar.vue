@@ -39,7 +39,7 @@
       <v-toolbar-title>Конспекты</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn
+      <v-btn link nuxt to="/login"
         outlined tile
         color="primary"
       >

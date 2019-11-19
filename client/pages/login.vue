@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-content style="min-height: 100vh">
+    <v-content>
       <v-container class="my-12">
         <v-row justify="center" no-gutters class="mx-md-6">
           <v-col :sm="10" :md="6" align="center">

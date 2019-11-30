@@ -18,7 +18,12 @@
       type="password"
     ></v-text-field>
 
-    <v-btn color="success" class="mx-4" :disabled="!valid" type="submit" @click="() => {}">Войти</v-btn>
+    <v-checkbox
+      v-model="rememberMe"
+      label="Оставаться в системе"
+    ></v-checkbox>
+
+    <v-btn x-large color="success" class="mx-4" :disabled="!valid" type="submit" @click="() => {}">Войти</v-btn>
   </v-form>
 </template>
 
@@ -36,12 +41,17 @@
             password: '',
             passwordRules: [
                 v => !!v || "Поле должно быть заполнено"
-            ]
+            ],
+
+            rememberMe: false,
         }),
 
         methods: {}
     };
 </script>
 
-<style scoped>
+<style>
+  .v-input__slot {
+    margin-bottom: 0 !important;
+  }
 </style>

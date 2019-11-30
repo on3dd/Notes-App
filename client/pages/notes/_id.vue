@@ -10,6 +10,41 @@
           no-gutters
           class="mx-md-6 px-2"
         >
+          <v-dialog
+            v-model="dialog"
+            max-width="350"
+          >
+            <v-card>
+              <v-card-title class="headline">Вы действительно хотите удалить данную запись?</v-card-title>
+
+              <v-card-text>
+                После удаления доступ к данной записи пропадет, а также вы потеряете баллы рейтинга за данную работу.
+              </v-card-text>
+              <v-card-text>
+                Последствия необратимы.
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  color="grey"
+                  text
+                  @click="dialog = !dialog"
+                >
+                  Отмена
+                </v-btn>
+
+                <v-btn
+                  color="red"
+                  text
+                  @click="confirmDeletion"
+                >
+                  Удалить
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-col
             :sm="10"
             :md="6"
@@ -83,10 +118,10 @@
               </v-btn>
               <div v-if="!isEditing" class="d-inline-block">
                 <div class="d-inline-block mr-1">
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block" @click="editNote">
                     <a style="color:white;text-decoration:none;">Редактировать</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="editNote">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-pencil</v-icon>
                     </a>
@@ -94,11 +129,11 @@
                 </div>
                 <div class="d-inline-block mr-1">
                   <v-btn v-bind:disabled="!note.link" x-large color="error" class="d-none d-sm-inline-block"
-                         @click="console.log('pressed delete btn')">
+                         @click="deleteNote">
                     <a style="color:white;text-decoration:none;">Удалить</a>
                   </v-btn>
                   <v-btn v-bind:disabled="!note.link" x-large color="error" class="d-sm-none my-2" style="min-width: 0;"
-                         @click="console.log('pressed delete btn')">
+                         @click="deleteNote">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-delete</v-icon>
                     </a>
@@ -108,20 +143,20 @@
               <div v-else class="d-inline-block">
                 <div class="d-inline-block mr-1">
                   <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block mr-1"
-                         @click="update">
+                         @click="updateNote">
                     <a style="color:white;text-decoration:none;">Сохранить</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="update">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="updateNote">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-check</v-icon>
                     </a>
                   </v-btn>
                 </div>
                 <div class="d-inline-block mr-1">
-                  <v-btn v-bind:disabled="!note.link" x-large class="d-none d-sm-inline-block mr-1" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large class="d-none d-sm-inline-block mr-1" @click="editNote">
                     <a style="color:inherit;text-decoration:none;">Отмена</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large class="d-sm-none my-2" style="min-width: 0;" @click="edit">
+                  <v-btn v-bind:disabled="!note.link" x-large class="d-sm-none my-2" style="min-width: 0;" @click="editNote">
                     <a style="color:inherit;text-decoration:none;">
                       <v-icon dark>mdi-cancel</v-icon>
                     </a>
@@ -164,7 +199,9 @@
             isEditing: false,
 
             noteTitleInput: '',
-            noteDescriptionInput: ''
+            noteDescriptionInput: '',
+
+            dialog: false
 
         }),
         components: {
@@ -240,20 +277,39 @@
         },
 
         methods: {
-            edit: function () {
+            editNote: function () {
                 this.isEditing = !this.isEditing
             },
 
-            update: function () {
+            updateNote: function () {
                 let data = new FormData()
                 data.append("title", this.noteTitleInput)
                 data.append("description", this.noteDescriptionInput)
 
-                axios.post("http://localhost:8080/api/v1/notes/1", data)
+                axios.post(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`, data)
                     .then(response => {
                         this.note.title = response.data.title
                         this.note.description = response.data.description
-                        return this.edit()
+                        return this.editNote()
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            },
+
+            deleteNote: function () {
+                this.dialog = !this.dialog
+            },
+
+            confirmDeletion: function () {
+                this.dialog = !this.dialog
+
+                // For some reason it doesn't work
+                axios.delete(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
+                    .then(response => {
+                        if (response.status == 200) {
+                            this.$nuxt.$router.replace({ path: `/notes`})
+                        }
                     })
                     .catch(err => {
                         console.error(err)

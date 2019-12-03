@@ -23,7 +23,24 @@
       label="Оставаться в системе"
     ></v-checkbox>
 
-    <v-btn x-large color="success" class="mx-4" :disabled="!valid" type="submit" @click="() => {}">Войти</v-btn>
+    <v-btn 
+      x-large color="success" 
+      class="mx-4" 
+      :disabled="!valid" 
+      type="submit" 
+      @click="() => {}"
+      >
+        Войти
+      </v-btn>
+
+      <v-btn 
+      x-large color="info" 
+      class="mx-4" 
+      :disabled="!valid"
+      link nuxt to="/join"
+      >
+        Регистрация
+      </v-btn>
   </v-form>
 </template>
 
@@ -46,7 +63,9 @@
             rememberMe: false,
         }),
 
-        methods: {}
+        methods: {
+
+        }
     };
 </script>
 

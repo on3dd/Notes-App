@@ -16,7 +16,8 @@
     "@nuxtjs/axios": "^5.8.0",
     "axios": "^0.19.0",
     "material-design-icons-iconfont": "^5.0.1",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "serialize-javascript": ">=2.1.1"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.9.0",

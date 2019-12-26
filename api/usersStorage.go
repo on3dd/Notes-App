@@ -42,7 +42,7 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	rows, err := api.db.Query("SELECT * FROM users ORDER BY name")
+	rows, err := api.db.Query("SELECT * FROM users ORDER BY id DESC")
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
@@ -77,16 +77,15 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 // AddUser adds a new user to DB
 func (api *API) AddUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	var user User
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-		log.Fatal(err)
-	}
+	user.Name = r.FormValue("name")
+	user.Password = r.FormValue("password")
 
 	var num int
 	id := api.db.QueryRow("SELECT id FROM users ORDER BY id DESC LIMIT 1")
-	err = id.Scan(&num)
+	err := id.Scan(&num)
 	if err == sql.ErrNoRows {
 		user.Id = 1
 	} else if err != nil {
@@ -94,6 +93,12 @@ func (api *API) AddUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	user.Id = num + 1
+
+	user.Password, err = HashPassword(user.Password)
+	if err != nil {
+		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
+		log.Fatalf("Cannot hash user's password, error: %v", err)
+	}
 
 	_, err = api.db.Exec("INSERT INTO users VALUES($1, $2, $3)",
 		user.Id, user.Name, user.Password)

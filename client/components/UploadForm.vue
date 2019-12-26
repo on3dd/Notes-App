@@ -206,11 +206,9 @@
                     })
             }
         },
-
         created() {
             this.getCategories()
         }
-
     }
 
 </script>

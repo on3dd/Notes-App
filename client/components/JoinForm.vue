@@ -24,46 +24,69 @@
       label="Повторите пароль"
       required
       name="repeatPassword"
-      type="repeatPassword"
+      type="password"
     ></v-text-field>
 
-    <v-btn 
-      x-large color="success" 
-      class="mx-4" 
-      :disabled="!valid" 
-      type="submit" 
-      @click="() => {}"
-      >
-        Зарегистрироваться
-      </v-btn>
+    <v-btn
+      x-large color="success"
+      class="mx-4"
+      :disabled="!valid"
+      type="submit"
+      @click="submit"
+    >
+      Зарегистрироваться
+    </v-btn>
   </v-form>
 </template>
 
 <script>
-    export default {
-        name: "JoinForm",
-        data: () => ({
-            valid: false,
-            username: '',
-            usernameRules: [
-                v => !!v || "Поле должно быть заполнено"
-            ],
+  import axios from "axios";
 
-            password: '',
-            passwordRules: [
-                v => !!v || "Поле должно быть заполнено"
-            ],
+  export default {
+    name: "JoinForm",
+    data: () => ({
+      valid: false,
+      username: '',
+      usernameRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ],
 
-            repeatPassword: '',
-            repeatPasswordRules: [
-                v => !!v || "Поле должно быть заполнено"
-            ]
-        }),
+      password: '',
+      passwordRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ],
 
-        methods: {
+      repeatPassword: '',
+      repeatPasswordRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ]
+    }),
 
+    methods: {
+      submit: function () {
+        if (this.password != this.repeatPassword) {
+          return
         }
-    };
+
+        let data = new FormData()
+
+        data.append("name", this.username)
+        data.append("password", this.password)
+
+        axios.post("http://localhost:8080/api/v1/users", data)
+          .then(response => {
+            if (response.status == 200) {
+              this.$nuxt.$router.replace({ path: `/notes/}`})
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
+
+    },
+  }
+  ;
 </script>
 
 <style>

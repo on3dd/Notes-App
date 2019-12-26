@@ -4,6 +4,7 @@
 # Local files
 logfile
 config.env
+keys
 downloads
 client/static/downloads
 

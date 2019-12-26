@@ -9,12 +9,16 @@ import (
 
 type API struct {
 	db *sql.DB
+	verifyKey []byte
+	singKey []byte
 }
 
 // New returns a new API instance
-func New(db *sql.DB) *API {
+func New(db *sql.DB, sk, vk []byte) *API {
 	return &API{
 		db: db,
+		singKey: sk,
+		verifyKey: vk,
 	}
 }
 

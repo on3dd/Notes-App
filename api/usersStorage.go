@@ -8,13 +8,6 @@ import (
 	"net/http"
 )
 
-// User represents a User instance in the DB
-type User struct {
-	Id       int    `json:"id,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Password string `json:"password,omitempty"`
-}
-
 // GetUser gets single user from DB by id
 func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

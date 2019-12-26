@@ -8,13 +8,6 @@ import (
 	"net/http"
 )
 
-// Teacher represents a Teacher instance in the DB
-type Teacher struct {
-	Id        int    `json:"id,omitempty"`
-	SubjectId int    `json:"subject_id,omitempty"`
-	Name      string `json:"name,omitempty"`
-}
-
 // GetTeacher gets single teacher from DB by id
 func (api *API) GetTeacher(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

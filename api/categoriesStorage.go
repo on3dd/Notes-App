@@ -8,14 +8,8 @@ import (
 	"net/http"
 )
 
-// Subject represents a Subject instance in the DB
-type Subject struct {
-	Id   int    `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-}
-
-// GetSubject gets single subject from DB by id
-func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
+// GetCategory gets single category from DB by id
+func (api *API) GetCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -25,10 +19,10 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	row := api.db.QueryRow("SELECT * FROM subjects WHERE id = $1", id)
+	row := api.db.QueryRow("SELECT * FROM categories WHERE id = $1", id)
 
-	var subject Subject
-	err := row.Scan(&subject.Id, &subject.Name)
+	var category Category
+	err := row.Scan(&category.Id, &category.Subject, &category.ParentId, &category.Name, &category.Description)
 	if err == sql.ErrNoRows {
 		WriteStatus(w, http.StatusNotFound, []byte(`{"status":"error"}`))
 		return
@@ -37,50 +31,42 @@ func (api *API) GetSubject(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	err = json.NewEncoder(w).Encode(subject)
+	err = json.NewEncoder(w).Encode(category)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// GetSubjects gets all subjects from DB
-func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
+// GetCategories gets all categories from DB
+func (api *API) GetCategories(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	var rows *sql.Rows
-	var err error
-
-	id := r.FormValue("id")
-	if id == "" {
-		rows, err = api.db.Query("SELECT * FROM subjects ORDER BY name")
-	} else {
-		rows, err = api.db.Query("SELECT * FROM subjects WHERE id = $1 ORDER BY name", id)
-	}
+	rows, err := api.db.Query("SELECT * FROM categories ORDER BY name")
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	var subjects []*Subject
+	var categories []*Category
 	for rows.Next() {
-		subject := &Subject{}
-		err := rows.Scan(&subject.Id, &subject.Name)
+		category := &Category{}
+		err := rows.Scan(&category.Id, &category.Subject, &category.ParentId, &category.Name, &category.Description)
 		if err != nil {
 			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)
 		}
-		subjects = append(subjects, subject)
+		categories = append(categories, category)
 	}
 	if err = rows.Err(); err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
 
-	if len(subjects) == 0 {
-		err = json.NewEncoder(w).Encode(make([]Subject, 0))
+	if len(categories) == 0 {
+		err = json.NewEncoder(w).Encode(make([]Category, 0))
 	} else {
-		err = json.NewEncoder(w).Encode(subjects)
+		err = json.NewEncoder(w).Encode(categories)
 	}
 	if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
@@ -88,29 +74,30 @@ func (api *API) GetSubjects(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// AddSubject adds a new subject to DB
-func (api *API) AddSubject(w http.ResponseWriter, r *http.Request) {
+// AddCategory adds a new category to DB
+func (api *API) AddCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	var subject Subject
-	err := json.NewDecoder(r.Body).Decode(&subject)
+	var category Category
+	err := json.NewDecoder(r.Body).Decode(&category)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var num int
-	id := api.db.QueryRow("SELECT id FROM subjects ORDER BY id DESC LIMIT 1")
+	id := api.db.QueryRow("SELECT id FROM categories ORDER BY id DESC LIMIT 1")
 	err = id.Scan(&num)
 	if err == sql.ErrNoRows {
-		subject.Id = 1
+		category.Id = 1
 	} else if err != nil {
 		WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 		log.Fatal(err)
 	}
-	subject.Id = num + 1
+	category.Id = num + 1
 
-	_, err = api.db.Exec("INSERT INTO subjects VALUES($1, $2)",
-		subject.Id, subject.Name)
+	_, err = api.db.Exec("INSERT INTO categories VALUES($1, $2, $3, $4, $5)",
+		category.Id, category.Subject, category.ParentId, category.Name, category.Description)
 
 	if err != nil {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
@@ -120,9 +107,10 @@ func (api *API) AddSubject(w http.ResponseWriter, r *http.Request) {
 	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
-// UpdateSubject updates a single subject in DB by id
-func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
+// UpdateCategory updates a single category in DB by id
+func (api *API) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := mux.Vars(r)["id"]
 	if id == "" {
@@ -130,14 +118,14 @@ func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var subject Subject
-	err := json.NewDecoder(r.Body).Decode(&subject)
+	var category Category
+	err := json.NewDecoder(r.Body).Decode(&category)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_, err = api.db.Exec("UPDATE subjects SET name = $2 WHERE id = ($1)",
-		id, subject.Name)
+	_, err = api.db.Exec("UPDATE categories SET (name, description) = ($2, $3) WHERE id = ($1)",
+		id, category.Name, category.Description)
 
 	if err != nil {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
@@ -147,9 +135,10 @@ func (api *API) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 	WriteStatus(w, http.StatusOK, []byte(`{"status":"success"}`))
 }
 
-// DeleteSubject deletes a single subject from DB by id
-func (api *API) DeleteSubject(w http.ResponseWriter, r *http.Request) {
+// DeleteCategory deletes a single category from DB by id
+func (api *API) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	id := mux.Vars(r)["id"]
 	if id == "" {
@@ -157,7 +146,7 @@ func (api *API) DeleteSubject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := api.db.Exec("DELETE FROM subjects WHERE id = $1", id)
+	_, err := api.db.Exec("DELETE FROM categories WHERE id = $1", id)
 	if err != nil {
 		WriteStatus(w, http.StatusBadRequest, []byte(`{"status":"error"}`))
 		return

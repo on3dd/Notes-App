@@ -1,26 +1,14 @@
-package main
+package db
 
 import (
 	"database/sql"
-
-	"Notes-App/api"
 	"fmt"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 	"log"
-	"net/http"
 	"os"
-	"time"
 )
 
-func main() {
-	f, err := openLogfile()
-	if err != nil {
-		log.Fatalf("Error opening file: %v", err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
-
+func New() *sql.DB {
 	config, err := loadConfig()
 	if err != nil {
 		log.Fatalf("Error loading config.env file: %v", err)
@@ -35,17 +23,7 @@ func main() {
 		log.Fatalf("Error pinging DB: %v", err)
 	}
 
-	server := &http.Server{
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		Addr:         ":8080",
-	}
-
-	apiHandler := api.New(db)
-	http.Handle("/api/", apiHandler)
-
-	log.Printf("Server successfully started at port %v\n", server.Addr)
-	log.Println(server.ListenAndServe())
+	return db
 }
 
 // Config represents structure of the config.env
@@ -55,11 +33,6 @@ type Config struct {
 	dbName string
 	dbHost string
 	dbPort string
-}
-
-func openLogfile() (f *os.File, err error) {
-	f, err = os.OpenFile("logfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	return f, err
 }
 
 func loadConfig() (config *Config, err error) {

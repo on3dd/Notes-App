@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-    <Navbar></Navbar>
     <v-content style="min-height: 100vh">
       <v-container class="my-12">
         <v-row justify="center" no-gutters class="mx-md-6">
@@ -10,7 +9,6 @@
         </v-row>
       </v-container>
     </v-content>
-    <Footer></Footer>
   </v-app>
 </template>
 
@@ -21,8 +19,6 @@ import JoinForm from "../components/JoinForm";
 
 export default {
   components: {
-    Navbar,
-    Footer,
     JoinForm
   },
   name: "join.vue"

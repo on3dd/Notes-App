@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-    <Navbar></Navbar>
     <v-content style="min-height: 100vh">
       <v-container
         class="my-12"
@@ -20,7 +19,6 @@
         </v-row>
       </v-container>
     </v-content>
-    <Footer></Footer>
   </v-app>
 </template>
 
@@ -31,9 +29,7 @@
 
     export default {
         components: {
-            Navbar,
             UploadForm,
-            Footer
         },
         name: "upload.vue"
     }

@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-    <Navbar></Navbar>
     <v-content style="min-height: 100vh">
       <v-container
         class="my-12"
@@ -168,13 +167,10 @@
         </v-row>
       </v-container>
     </v-content>
-    <Footer></Footer>
   </v-app>
 </template>
 
 <script>
-    import Navbar from "~/components/Navbar";
-    import Footer from "~/components/Footer";
     import axios from 'axios'
 
     export default {
@@ -205,8 +201,7 @@
 
         }),
         components: {
-            Navbar,
-            Footer,
+
         },
         mounted() {
             // Time formatting options

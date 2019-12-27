@@ -23,13 +23,17 @@ module.exports = {
     color: '#2980b9',
     height: '3px'
   },
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/vuetify',
+  ],
   /*
   ** Build configuration
   */
-  buildModules: [
-    '@nuxtjs/vuetify',
-    '@nuxtjs/axios',
-  ],
+  // buildModules: [
+  //
+  //
+  // ],
 
   axios: {
     // proxyHeaders: false

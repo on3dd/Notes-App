@@ -57,9 +57,9 @@
     data: () => ({
       drawer: true,
       items: [
-        { path: "/", icon: "mdi-home", text: "Главная" },
-        { path: "/notes", icon: "mdi-folder-open", text: "Работы" },
-        { path: "/users", icon: "mdi-account-group", text: "Пользователи" }
+        {path: "/", icon: "mdi-home", text: "Главная"},
+        {path: "/notes", icon: "mdi-folder-open", text: "Работы"},
+        {path: "/users", icon: "mdi-account-group", text: "Пользователи"}
       ]
     }),
   };

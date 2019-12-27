@@ -71,7 +71,7 @@
     methods: {
       submit: function () {
         if (this.password != this.repeatPassword) {
-          return
+          return console.log("Password does not match!")
         }
 
         let data = new FormData()
@@ -79,10 +79,10 @@
         data.append("name", this.username)
         data.append("password", this.password)
 
-        axios.post("http://localhost:8080/api/v1/users", data)
+        axios.post("http://localhost:8080/api/v1/join", data)
           .then(response => {
             if (response.status == 200) {
-              this.$nuxt.$router.replace({ path: `/notes/}`})
+              this.$nuxt.$router.replace({ path: `/users/${response.data.id}`})
             }
           })
           .catch(err => {
@@ -102,6 +102,9 @@
 
   .sign-in {
     text-align: left;
+  }
+  .sign-in a {
+    text-decoration: none;
   }
   .sign-in a:hover {
     text-decoration: underline;

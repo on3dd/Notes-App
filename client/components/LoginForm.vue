@@ -34,7 +34,7 @@
           class="mx-4"
           :disabled="!valid"
           type="submit"
-          @click="() => {}"
+          @click="submit"
         >
           Войти
         </v-btn>
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+
+  import axios from "axios";
 
   export default {
     name: "LoginForm",
@@ -62,7 +64,24 @@
       rememberMe: false,
     }),
 
-    methods: {}
+    methods: {
+      submit: function () {
+        let data = new FormData()
+
+        data.append("name", this.username)
+        data.append("password", this.password)
+
+        axios.post("http://localhost:8080/api/v1/login", data)
+          .then(response => {
+            if (response.status == 200) {
+              this.$nuxt.$router.replace({ path: `/notes/}`})
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
+    }
   };
 </script>
 
@@ -72,6 +91,9 @@
   }
   .sign-up {
     text-align: left;
+  }
+  .sign-up a {
+    text-decoration: none;
   }
   .sign-up a:hover {
     text-decoration: underline;

@@ -8,7 +8,24 @@
         label="Логин"
         required
         name="username"
-      ></v-text-field>
+      />
+
+      <v-text-field
+        v-model="email"
+        :rules="emailRules"
+        label="Email"
+        required
+        name="email"
+        type="email"
+      />
+
+      <v-textarea
+        v-model="about"
+        :rules="aboutRules"
+        label="О себе"
+        name="about"
+        rows="2"
+      />
 
       <v-text-field
         v-model="password"
@@ -17,7 +34,7 @@
         required
         name="password"
         type="password"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="repeatPassword"
@@ -26,7 +43,7 @@
         required
         name="repeatPassword"
         type="password"
-      ></v-text-field>
+      />
 
       <div class="mb-3 sign-in">
         <nuxt-link nuxt to="/login">Уже зарегестрированы?</nuxt-link>
@@ -62,6 +79,14 @@
         v => !!v || "Поле должно быть заполнено"
       ],
 
+      email: '',
+      emailRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ],
+
+      about: '',
+      aboutRules: [],
+
       repeatPassword: '',
       repeatPasswordRules: [
         v => !!v || "Поле должно быть заполнено"
@@ -77,6 +102,8 @@
         let data = new FormData()
 
         data.append("name", this.username)
+        data.append("email", this.email)
+        data.append("about", this.about)
         data.append("password", this.password)
 
         axios.post("http://localhost:8080/api/v1/join", data)

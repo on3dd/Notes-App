@@ -51,7 +51,7 @@ func (api *API) GetUsers(w http.ResponseWriter, r *http.Request) {
 	var users []*User
 	for rows.Next() {
 		user := &User{}
-		err := rows.Scan(&user.Id, &user.Name, &user.Password)
+		err := rows.Scan(&user.Id, &user.Name, &user.Email, &user.About, &user.Password)
 		if err != nil {
 			WriteStatus(w, http.StatusInternalServerError, []byte(`{"status":"error"}`))
 			log.Fatal(err)

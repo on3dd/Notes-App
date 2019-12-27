@@ -15,6 +15,8 @@ func (api *API) SignUp(w http.ResponseWriter, r *http.Request) {
 	var user User
 	user.Name = r.FormValue("name")
 	user.Password = r.FormValue("password")
+	user.Email = r.FormValue("email")
+	user.About = r.FormValue("about")
 
 	var num int
 	id := api.db.QueryRow("SELECT id FROM users ORDER BY id DESC LIMIT 1")
@@ -33,8 +35,8 @@ func (api *API) SignUp(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Cannot hash user's password, error: %v", err)
 	}
 
-	_, err = api.db.Exec("INSERT INTO users VALUES($1, $2, $3)",
-		user.Id, user.Name, user.Password)
+	_, err = api.db.Exec("INSERT INTO users VALUES($1, $2, $3, $4, $5)",
+		user.Id, user.Name, user.Password, user.Email, user.About)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

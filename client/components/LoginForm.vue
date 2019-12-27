@@ -74,7 +74,7 @@
         axios.post("http://localhost:8080/api/v1/login", data)
           .then(response => {
             if (response.status == 200) {
-              this.$nuxt.$router.replace({ path: `/notes/}`})
+              this.$nuxt.$router.replace({ path: `/notes`})
             }
           })
           .catch(err => {

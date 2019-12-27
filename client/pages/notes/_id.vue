@@ -46,34 +46,22 @@
           </v-dialog>
           <v-col
             :sm="10"
-            :md="6"
+            :md="8"
+            :lg="6"
+            class="px-2"
           >
-            <div class="d-none d-sm-block mb-3">
+            <div class="mb-3">
               <v-text-field
                 v-bind:class="{ 'd-none': !isEditing }"
                 v-model="noteTitleInput"
-                class="display-3 note-title"
+                class="display-2 display-3 note-title"
                 id="note-title"
                 outlined
                 placeholder="Название"
               ></v-text-field>
               <span
                 v-bind:class="{ 'd-none': isEditing }"
-                class="text-truncate display-3"
-              >{{ note.title }}</span>
-            </div>
-            <div class="d-block d-sm-none mb-3">
-              <v-text-field
-                v-bind:class="{ 'd-none': !isEditing }"
-                v-model="noteTitleInput"
-                class="display-2 note-title"
-                id="note-title"
-                outlined
-                placeholder="Название"
-              ></v-text-field>
-              <span
-                v-bind:class="{ 'd-none': isEditing }"
-                class="display-2 text-truncate"
+                class="d-block display-2 display-sm-3"
               >{{ note.title }}</span>
             </div>
 
@@ -91,7 +79,6 @@
                 class="headline font-weight-regular"
               >{{note.description}}</span>
             </div>
-
             <div class="d-none d-md-block title mb-2">
               <a class="author font-weight-regular mr-2" href="">{{ author.name }},</a>
               <span class="font-weight-light">{{ note.posted_at }}</span>
@@ -103,13 +90,14 @@
               <span class="d-block font-weight-light">{{ note.posted_at }}</span>
             </div>
 
-            <span class="title mb-2 d-block font-weight-regular">Предмет:
-              <a class="subject" href="">{{subject.name}}</a>
-            </span>
-
-            <span class="title mb-2 d-block font-weight-regular">Преподаватель:
-              <a class="teacher" href="">{{teacher.name}}</a>
-            </span>
+            <div>
+              <span class="title mb-2 d-block font-weight-regular">Предмет:
+                <a class="subject" href="">{{subject.name}}</a>
+              </span>
+              <span class="title mb-2 d-block font-weight-regular">Преподаватель:
+                <a class="teacher" href="">{{teacher.name}}</a>
+              </span>
+            </div>
 
             <div class="my-6">
               <v-btn v-bind:disabled="!note.link" x-large color="primary" class="d-sm-inline-block mr-1">
@@ -117,10 +105,12 @@
               </v-btn>
               <div v-if="!isEditing" class="d-inline-block">
                 <div class="d-inline-block mr-1">
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block" @click="editNote">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-none d-sm-inline-block"
+                         @click="editNote">
                     <a style="color:white;text-decoration:none;">Редактировать</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="editNote">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2"
+                         style="min-width: 0;" @click="editNote">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-pencil</v-icon>
                     </a>
@@ -145,7 +135,8 @@
                          @click="updateNote">
                     <a style="color:white;text-decoration:none;">Сохранить</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2" style="min-width: 0;" @click="updateNote">
+                  <v-btn v-bind:disabled="!note.link" x-large color="success" class="d-sm-none my-2"
+                         style="min-width: 0;" @click="updateNote">
                     <a style="color:white;text-decoration:none;">
                       <v-icon dark>mdi-check</v-icon>
                     </a>
@@ -155,7 +146,8 @@
                   <v-btn v-bind:disabled="!note.link" x-large class="d-none d-sm-inline-block mr-1" @click="editNote">
                     <a style="color:inherit;text-decoration:none;">Отмена</a>
                   </v-btn>
-                  <v-btn v-bind:disabled="!note.link" x-large class="d-sm-none my-2" style="min-width: 0;" @click="editNote">
+                  <v-btn v-bind:disabled="!note.link" x-large class="d-sm-none my-2" style="min-width: 0;"
+                         @click="editNote">
                     <a style="color:inherit;text-decoration:none;">
                       <v-icon dark>mdi-cancel</v-icon>
                     </a>
@@ -171,147 +163,145 @@
 </template>
 
 <script>
-    import axios from 'axios'
+  import axios from 'axios'
 
-    export default {
-        data: () => ({
-            note: {
-                title: "Неизвестное название",
-                description: "Неизвестное описание",
-                posted_at: "1 января 2000 г., 00:00:00",
+  export default {
+    data: () => ({
+      note: {
+        title: "Неизвестное название",
+        description: "Неизвестное описание",
+        posted_at: "1 января 2000 г., 00:00:00",
 
-            },
-            author: {
-                name: "Неизвестный пользователь"
-            },
-            category: '',
-            subject: {
-                name: "Неизвестный предмет"
-            },
-            teacher: {
-                name: "Неизвестный преподаватель"
-            },
+      },
+      author: {
+        name: "Неизвестный пользователь"
+      },
+      category: '',
+      subject: {
+        name: "Неизвестный предмет"
+      },
+      teacher: {
+        name: "Неизвестный преподаватель"
+      },
 
-            isEditing: false,
+      isEditing: false,
 
-            noteTitleInput: '',
-            noteDescriptionInput: '',
+      noteTitleInput: '',
+      noteDescriptionInput: '',
 
-            dialog: false
+      dialog: false
 
-        }),
-        components: {
+    }),
+    components: {},
+    mounted() {
+      // Time formatting options
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timezone: 'UTC',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      };
 
-        },
-        mounted() {
-            // Time formatting options
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                timezone: 'UTC',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            };
+      axios.get(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
+        .then(response => {
+          console.log(response.data)
+          this.note = response.data
 
-            axios.get(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
+          this.noteTitleInput = this.note.title
+          this.noteDescriptionInput = this.note.description
+
+          let timestamp = Date.parse(this.note.posted_at)
+          this.note.posted_at = new Date(timestamp).toLocaleString("ru", options)
+
+          axios.get(`http://localhost:8080/api/v1/users/${this.note.author_id}`)
+            .then(response => {
+              console.log(response.data)
+              this.author = response.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+
+          axios.get(`http://localhost:8080/api/v1/categories/${this.note.category_id}`)
+            .then(response => {
+              console.log(response.data)
+              this.category = response.data
+
+              axios.get(`http://localhost:8080/api/v1/subjects/${this.category.subject}`)
                 .then(response => {
-                    console.log(response.data)
-                    this.note = response.data
-
-                    this.noteTitleInput = this.note.title
-                    this.noteDescriptionInput = this.note.description
-
-                    let timestamp = Date.parse(this.note.posted_at)
-                    this.note.posted_at = new Date(timestamp).toLocaleString("ru", options)
-
-                    axios.get(`http://localhost:8080/api/v1/users/${this.note.author_id}`)
-                        .then(response => {
-                            console.log(response.data)
-                            this.author = response.data
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-
-                    axios.get(`http://localhost:8080/api/v1/categories/${this.note.category_id}`)
-                        .then(response => {
-                            console.log(response.data)
-                            this.category = response.data
-
-                            axios.get(`http://localhost:8080/api/v1/subjects/${this.category.subject}`)
-                                .then(response => {
-                                    console.log(response.data)
-                                    this.subject = response.data
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                })
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-
-                    axios.get(`http://localhost:8080/api/v1/teachers/${this.note.teacher_id}`)
-                        .then(response => {
-                            console.log(response.data)
-                            this.teacher = response.data
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
+                  console.log(response.data)
+                  this.subject = response.data
                 })
                 .catch(err => {
-                    console.log(err)
+                  console.log(err)
                 })
-        },
+            })
+            .catch(err => {
+              console.log(err)
+            })
 
-        validate({params}) {
-            return /^\d+$/.test(params.id)
-        },
+          axios.get(`http://localhost:8080/api/v1/teachers/${this.note.teacher_id}`)
+            .then(response => {
+              console.log(response.data)
+              this.teacher = response.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
 
-        methods: {
-            editNote: function () {
-                this.isEditing = !this.isEditing
-            },
+    validate({params}) {
+      return /^\d+$/.test(params.id)
+    },
 
-            updateNote: function () {
-                let data = new FormData()
-                data.append("title", this.noteTitleInput)
-                data.append("description", this.noteDescriptionInput)
+    methods: {
+      editNote: function () {
+        this.isEditing = !this.isEditing
+      },
 
-                axios.post(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`, data)
-                    .then(response => {
-                        this.note.title = response.data.title
-                        this.note.description = response.data.description
-                        return this.editNote()
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
-            },
+      updateNote: function () {
+        let data = new FormData()
+        data.append("title", this.noteTitleInput)
+        data.append("description", this.noteDescriptionInput)
 
-            deleteNote: function () {
-                this.dialog = !this.dialog
-            },
+        axios.post(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`, data)
+          .then(response => {
+            this.note.title = response.data.title
+            this.note.description = response.data.description
+            return this.editNote()
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      },
 
-            confirmDeletion: function () {
-                this.dialog = !this.dialog
+      deleteNote: function () {
+        this.dialog = !this.dialog
+      },
 
-                // For some reason it doesn't work
-                axios.delete(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
-                    .then(response => {
-                        if (response.status == 200) {
-                            this.$nuxt.$router.replace({ path: `/notes`})
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
+      confirmDeletion: function () {
+        this.dialog = !this.dialog
+
+        // For some reason it doesn't work
+        axios.delete(`http://localhost:8080/api/v1/notes/${this.$route.params.id}`)
+          .then(response => {
+            if (response.status == 200) {
+              this.$nuxt.$router.replace({path: `/notes`})
             }
-        }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     }
+  }
 </script>
 
 <style>

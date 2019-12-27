@@ -1,42 +1,48 @@
 <template>
-  <v-form id="form" v-model="valid" lazy-validation onsubmit="return false;">
-    <span class="display-3 text-center d-block mb-3">Регистрация</span>
-    <v-text-field
-      v-model="username"
-      :rules="usernameRules"
-      label="Логин"
-      required
-      name="username"
-    ></v-text-field>
+  <v-col>
+    <v-form id="form" v-model="valid" lazy-validation onsubmit="return false;">
+      <span class="display-2 display-sm-3 text-center d-block mb-3">Регистрация</span>
+      <v-text-field
+        v-model="username"
+        :rules="usernameRules"
+        label="Логин"
+        required
+        name="username"
+      ></v-text-field>
 
-    <v-text-field
-      v-model="password"
-      :rules="passwordRules"
-      label="Пароль"
-      required
-      name="password"
-      type="password"
-    ></v-text-field>
+      <v-text-field
+        v-model="password"
+        :rules="passwordRules"
+        label="Пароль"
+        required
+        name="password"
+        type="password"
+      ></v-text-field>
 
-    <v-text-field
-      v-model="repeatPassword"
-      :rules="repeatPasswordRules"
-      label="Повторите пароль"
-      required
-      name="repeatPassword"
-      type="password"
-    ></v-text-field>
+      <v-text-field
+        v-model="repeatPassword"
+        :rules="repeatPasswordRules"
+        label="Повторите пароль"
+        required
+        name="repeatPassword"
+        type="password"
+      ></v-text-field>
 
-    <v-btn
-      x-large color="success"
-      class="mx-4"
-      :disabled="!valid"
-      type="submit"
-      @click="submit"
-    >
-      Зарегистрироваться
-    </v-btn>
-  </v-form>
+      <div class="mb-3 sign-in">
+        <nuxt-link nuxt to="/login">Уже зарегестрированы?</nuxt-link>
+      </div>
+
+      <v-btn
+        x-large color="success"
+        class="mx-4"
+        :disabled="!valid"
+        type="submit"
+        @click="submit"
+      >
+        Зарегистрироваться
+      </v-btn>
+    </v-form>
+  </v-col>
 </template>
 
 <script>
@@ -92,5 +98,12 @@
 <style>
   .v-input__slot {
     margin-bottom: 0 !important;
+  }
+
+  .sign-in {
+    text-align: left;
+  }
+  .sign-in a:hover {
+    text-decoration: underline;
   }
 </style>

@@ -1,85 +1,87 @@
 <template>
-  <v-form
-    id="form"
-    v-model="valid"
-    lazy-validation
-    onsubmit="return false;"
-  >
-    <span class="display-3 text-center d-block mb-3">Загрузка работы</span>
-    <v-text-field
-      v-model="title"
-      :rules="titleRules"
-      label="Название"
-      required
-      name="title"
-    ></v-text-field>
-
-    <v-textarea
-      v-model="description"
-      :rules="descriptionRules"
-      label="Описание"
-      hint="Введите описание работы"
-      name="descirption"
-    ></v-textarea>
-
-    <v-file-input
-      v-model="file"
-      :rules="fileRules"
-      label="Файлы"
-      accept="application/pdf"
-      required
-      name="file"
-    ></v-file-input>
-
-    <v-select
-      v-model="category"
-      :rules="categoryRules"
-      :items="categories"
-      item-text="name"
-      label="Категория"
-      required
-      name="category"
-      @change="getSubjects"
-    ></v-select>
-
-    <v-select
-      v-model="subject"
-      :rules="subjectRules"
-      :items="subjects"
-      item-text="name"
-      label="Предмет"
-      required
-      name="subject"
-      @change="getTeachers"
-    ></v-select>
-
-    <v-select
-      v-model="teacher"
-      :rules="teacherRules"
-      :items="teachers"
-      item-text="name"
-      label="Преподаватель"
-      required
-      name="teacher"
-    ></v-select>
-
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'Вы должны принять условия пользования!']"
-      label="Я согласен с условиями пользования сервисом"
-      required
-    ></v-checkbox>
-
-    <v-btn
-      color="success"
-      class="mx-4"
-      :disabled="!valid"
-      type="submit"
-      @click="this.submit"
+  <v-col>
+    <v-form
+      id="form"
+      v-model="valid"
+      lazy-validation
+      onsubmit="return false;"
     >
-      Отправить
-    </v-btn>
-  </v-form>
+      <span class="display-2 display-sm-3 text-center d-block mb-3">Загрузка работы</span>
+      <v-text-field
+        v-model="title"
+        :rules="titleRules"
+        label="Название"
+        required
+        name="title"
+      ></v-text-field>
+
+      <v-textarea
+        v-model="description"
+        :rules="descriptionRules"
+        label="Описание"
+        hint="Введите описание работы"
+        name="descirption"
+      ></v-textarea>
+
+      <v-file-input
+        v-model="file"
+        :rules="fileRules"
+        label="Файлы"
+        accept="application/pdf"
+        required
+        name="file"
+      ></v-file-input>
+
+      <v-select
+        v-model="category"
+        :rules="categoryRules"
+        :items="categories"
+        item-text="name"
+        label="Категория"
+        required
+        name="category"
+        @change="getSubjects"
+      ></v-select>
+
+      <v-select
+        v-model="subject"
+        :rules="subjectRules"
+        :items="subjects"
+        item-text="name"
+        label="Предмет"
+        required
+        name="subject"
+        @change="getTeachers"
+      ></v-select>
+
+      <v-select
+        v-model="teacher"
+        :rules="teacherRules"
+        :items="teachers"
+        item-text="name"
+        label="Преподаватель"
+        required
+        name="teacher"
+      ></v-select>
+
+      <v-checkbox
+        v-model="checkbox"
+        :rules="[v => !!v || 'Вы должны принять условия пользования!']"
+        label="Я согласен с условиями пользования сервисом"
+        required
+      ></v-checkbox>
+
+      <v-btn
+        color="success"
+        class="mx-4"
+        :disabled="!valid"
+        type="submit"
+        @click="this.submit"
+      >
+        Отправить
+      </v-btn>
+    </v-form>
+  </v-col>
 </template>
 
 <script>

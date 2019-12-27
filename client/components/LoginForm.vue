@@ -1,76 +1,80 @@
 <template>
-  <v-form id="form" v-model="valid" lazy-validation onsubmit="return false;">
-    <span class="display-3 text-center d-block mb-3">Авторизация</span>
-    <v-text-field
-      v-model="username"
-      :rules="usernameRules"
-      label="Логин"
-      required
-      name="username"
-    ></v-text-field>
+  <v-col>
+    <v-form id="form" v-model="valid" lazy-validation onsubmit="return false;">
+      <span class="display-2 display-sm-3 text-center d-block mb-3">Авторизация</span>
+      <v-text-field
+        v-model="username"
+        :rules="usernameRules"
+        label="Логин"
+        required
+        name="username"
+      ></v-text-field>
 
-    <v-text-field
-      v-model="password"
-      :rules="passwordRules"
-      label="Пароль"
-      required
-      name="password"
-      type="password"
-    ></v-text-field>
+      <v-text-field
+        v-model="password"
+        :rules="passwordRules"
+        label="Пароль"
+        required
+        name="password"
+        type="password"
+      ></v-text-field>
 
-    <v-checkbox
-      v-model="rememberMe"
-      label="Оставаться в системе"
-    ></v-checkbox>
+      <v-checkbox
+        v-model="rememberMe"
+        label="Оставаться в системе"
+      ></v-checkbox>
 
-    <v-btn 
-      x-large color="success" 
-      class="mx-4" 
-      :disabled="!valid" 
-      type="submit" 
-      @click="() => {}"
-      >
-        Войти
-      </v-btn>
+      <div class="mb-3 sign-up">
+        <nuxt-link nuxt to="/join">Еще не зарегестрированы?</nuxt-link>
+      </div>
 
-      <v-btn 
-      x-large color="info" 
-      class="mx-4" 
-      :disabled="!valid"
-      link nuxt to="/join"
-      >
-        Регистрация
-      </v-btn>
-  </v-form>
+      <div>
+        <v-btn
+          x-large color="success"
+          class="mx-4"
+          :disabled="!valid"
+          type="submit"
+          @click="() => {}"
+        >
+          Войти
+        </v-btn>
+      </div>
+    </v-form>
+  </v-col>
 </template>
 
 <script>
 
-    export default {
-        name: "LoginForm",
-        data: () => ({
-            valid: false,
-            username: '',
-            usernameRules: [
-                v => !!v || "Поле должно быть заполнено"
-            ],
+  export default {
+    name: "LoginForm",
+    data: () => ({
+      valid: false,
+      username: '',
+      usernameRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ],
 
-            password: '',
-            passwordRules: [
-                v => !!v || "Поле должно быть заполнено"
-            ],
+      password: '',
+      passwordRules: [
+        v => !!v || "Поле должно быть заполнено"
+      ],
 
-            rememberMe: false,
-        }),
+      rememberMe: false,
+    }),
 
-        methods: {
-
-        }
-    };
+    methods: {}
+  };
 </script>
 
 <style>
   .v-input__slot {
     margin-bottom: 0 !important;
   }
+  .sign-up {
+    text-align: left;
+  }
+  .sign-up a:hover {
+    text-decoration: underline;
+  }
+
 </style>

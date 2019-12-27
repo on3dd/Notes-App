@@ -11,6 +11,9 @@ import (
 func (api *API) NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
+	r.HandleFunc("/api/v1/login", logHandlerCall(api.SingIn)).Methods("POST")
+	r.HandleFunc("/api/v1/join", logHandlerCall(api.SignUp)).Methods("POST")
+
 	r.HandleFunc("/api/v1/notes/{id}", logHandlerCall(api.GetNote)).Methods("GET")
 	r.HandleFunc("/api/v1/notes", logHandlerCall(api.GetNotes)).Methods("GET")
 	r.HandleFunc("/api/v1/notes", logHandlerCall(api.AddNote)).Methods("POST")
@@ -19,7 +22,7 @@ func (api *API) NewRouter() *mux.Router {
 
 	r.HandleFunc("/api/v1/users/{id}", logHandlerCall(api.GetUser)).Methods("GET")
 	r.HandleFunc("/api/v1/users", logHandlerCall(api.GetUsers)).Methods("GET")
-	r.HandleFunc("/api/v1/users", logHandlerCall(api.AddUser)).Methods("POST")
+	r.HandleFunc("/api/v1/users", logHandlerCall(api.SignUp)).Methods("POST")
 	r.HandleFunc("/api/v1/users/{id}", logHandlerCall(api.UpdateUser)).Methods("PUT")
 	r.HandleFunc("/api/v1/users/{id}", logHandlerCall(api.DeleteUser)).Methods("DELETE")
 
